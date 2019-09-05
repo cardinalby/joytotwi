@@ -1,8 +1,18 @@
 package cmd
 
 import (
+	"joytotwi/app/joy"
+	"joytotwi/app/joy/selector"
+	"joytotwi/app/twisender"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 )
+
+const postsReverse = false
+const postsOffset = 0
+const postsLimit = 0
+const initByTweetsCount = 1
 
 // WatchCommand for checking for new posts periodically and post them to twitter
 type WatchCommand struct {
@@ -17,6 +27,53 @@ func (cmd *WatchCommand) SetCommonOptions(opts *CommonOptions) {
 
 // Execute command method for flags.Commander
 func (cmd *WatchCommand) Execute(args []string) error {
-	log.Infof("%d\n", cmd.Period)
+	postReader, err := selector.GetPostReader(cmd.SourceType, postsReverse, postsOffset, postsLimit)
+	if err != nil {
+		return err
+	}
+
+	client := twisender.CreateNewClient(getTwiCredsFromOpts(cmd.CommonOptions))
+	err = client.Init(initByTweetsCount)
+	if err != nil {
+		return err
+	}
+
+	done := make(chan struct{})
+	defer close(done)
+
+	cmd.startWatch(client, postReader, done)
+
 	return nil
+}
+
+func (cmd *WatchCommand) startWatch(
+	client *twisender.Client,
+	postReader joy.PostsReader,
+	done chan struct{},
+) {
+	posts, postAck := watchForPosts(
+		postReader,
+		cmd.UserName,
+		time.Duration(cmd.Period)*time.Second,
+		done,
+	)
+	for {
+		select {
+		case post := <-posts:
+			tweetID, exists, postErr := client.PostNew(post.Link, post.ImgURL)
+
+			if postErr != nil {
+				log.Errorf("Post '%s': error publishing tweet: %s", post.Link, postErr.Error())
+				postAck <- true
+			} else if exists {
+				postAck <- false
+			} else {
+				postAck <- true
+				log.Infof("Post '%s' added, tweet id: %d", post.Link, tweetID)
+			}
+
+		case <-done:
+			return
+		}
+	}
 }
