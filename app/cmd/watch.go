@@ -66,10 +66,11 @@ func (cmd *WatchCommand) startWatch(
 				log.Errorf("Post '%s': error publishing tweet: %s", post.Link, postErr.Error())
 				postAck <- true
 			} else if exists {
+				log.Infof("Post '%s' exists, waiting for next check...", post.Link)
 				postAck <- false
 			} else {
-				postAck <- true
 				log.Infof("Post '%s' added, tweet id: %d", post.Link, tweetID)
+				postAck <- true
 			}
 
 		case <-done:

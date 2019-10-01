@@ -15,7 +15,8 @@ func watchForPosts(
 	period time.Duration,
 	done chan struct{},
 ) (posts chan *joy.Post, postAck chan bool) {
-	timer := time.NewTimer(period)
+	// start first attempt immediately
+	timer := time.NewTimer(time.Millisecond * 0)
 	posts = make(chan *joy.Post)
 	postAck = make(chan bool)
 
@@ -34,6 +35,7 @@ func watchForPosts(
 			}
 		}
 	}()
+
 	return
 }
 
