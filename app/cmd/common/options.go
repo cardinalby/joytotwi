@@ -1,6 +1,7 @@
-package cmd
+package common
 
 import (
+	"joytotwi/app/twisender"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,7 +13,7 @@ import (
 )
 
 // CommonOptions for all commands
-type CommonOptions struct {
+type Options struct {
 	// see ParserID consts in each of parsers impls
 	SourceType        string `json:"sourceType" env:"JOY_SRC_TYPE" envDefault:"page"`
 	UserName          string `json:"userName" env:"JOY_USER_NAME"`
@@ -22,23 +23,13 @@ type CommonOptions struct {
 	ConsumerSecret    string `json:"consumerSecret" env:"TW_CONSUMER_SECRET"`
 }
 
-// CommonOptionsCommander is command containing CommonOptions
-type CommonOptionsCommander interface {
-	SetCommonOptions(opts *CommonOptions)
-}
-
-// SetFromAppOptions assign correspondent fields from appOpts
-func (opts *CommonOptions) SetFromAppOptions(appOpts *AppOptions) {
-	opts.SourceType = appOpts.SourceType
-	opts.UserName = appOpts.UserName
-	opts.AccessToken = appOpts.AccessToken
-	opts.AccessTokenSecret = appOpts.AccessTokenSecret
-	opts.ConsumerKey = appOpts.ConsumerKey
-	opts.ConsumerSecret = appOpts.ConsumerSecret
+// Commander is command containing CommonOptions
+type Commander interface {
+	SetCommonOptions(opts *Options)
 }
 
 // ReadFromJSONFile reads options from json config
-func (opts *CommonOptions) ReadFromJSONFile(path string) error {
+func (opts *Options) ReadFromJSONFile(path string) error {
 	absPath, err := filepath.Abs(path)
 	if err != nil {
 		return fmt.Errorf("Invalid file path: '%s', %s", path, err.Error())
@@ -55,12 +46,12 @@ func (opts *CommonOptions) ReadFromJSONFile(path string) error {
 }
 
 // ReadFromEnv reads options from env
-func (opts *CommonOptions) ReadFromEnv() error {
+func (opts *Options) ReadFromEnv() error {
 	return env.Parse(opts)
 }
 
 // Validate option values
-func (opts *CommonOptions) Validate() error {
+func (opts *Options) Validate() error {
 	messages := []string{}
 
 	checkNotEmpty := func(val string, name string) {
@@ -80,4 +71,14 @@ func (opts *CommonOptions) Validate() error {
 		return errors.New(strings.Join(messages, ", "))
 	}
 	return nil
+}
+
+// GetTwiCreds extracts twi creds
+func (opts Options) GetTwiCreds() twisender.ClientCreds {
+	return twisender.ClientCreds{
+		AccessToken:       opts.AccessToken,
+		AccessTokenSecret: opts.AccessTokenSecret,
+		ConsumerKey:       opts.ConsumerKey,
+		ConsumerSecret:    opts.ConsumerSecret,
+	}
 }

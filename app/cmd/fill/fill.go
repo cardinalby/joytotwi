@@ -1,8 +1,9 @@
-package cmd
+package fill
 
 import (
 	"errors"
 	"fmt"
+	"joytotwi/app/cmd/common"
 	"joytotwi/app/joy"
 	"joytotwi/app/joy/selector"
 	"joytotwi/app/twisender"
@@ -16,12 +17,12 @@ type FillCommand struct {
 	Limit          int  `short:"l" long:"limit" default:"0" description:"How many posts to process. 0 to process all"`
 	StopOnExistent bool `long:"stop-on-existent" description:"Stop parse posts after first existent tweet"`
 	StopOnError    bool `long:"stop-on-error" description:"Stop parse posts after first error"`
-	CommonOptions
+	common.Options
 }
 
 // SetCommonOptions sets common options in command
-func (cmd *FillCommand) SetCommonOptions(opts *CommonOptions) {
-	cmd.CommonOptions = *opts
+func (cmd *FillCommand) SetCommonOptions(opts *common.Options) {
+	cmd.Options = *opts
 }
 
 // Execute command method for flags.Commander
@@ -31,7 +32,7 @@ func (cmd *FillCommand) Execute(args []string) error {
 		return err
 	}
 
-	client := twisender.CreateNewClient(getTwiCredsFromOpts(cmd.CommonOptions))
+	client := twisender.CreateNewClient(cmd.Options.GetTwiCreds())
 	err = client.Init(twisender.TimelineMaxCount)
 	if err != nil {
 		return err
@@ -105,13 +106,4 @@ func (cmd *FillCommand) performFill(
 
 func getPostLogName(post *joy.Post, offset int) string {
 	return fmt.Sprintf("post '%s' (offset: %d)", post.Link, offset)
-}
-
-func getTwiCredsFromOpts(opt CommonOptions) twisender.ClientCreds {
-	return twisender.ClientCreds{
-		AccessToken:       opt.AccessToken,
-		AccessTokenSecret: opt.AccessTokenSecret,
-		ConsumerKey:       opt.ConsumerKey,
-		ConsumerSecret:    opt.ConsumerSecret,
-	}
 }

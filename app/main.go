@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"joytotwi/app/cmd"
+	"joytotwi/app/cmd/common"
 	"os"
 
 	"github.com/jessevdk/go-flags"
@@ -11,7 +12,7 @@ import (
 
 func main() {
 	var opts cmd.AppOptions
-	envCommonOptions := cmd.CommonOptions{}
+	envCommonOptions := common.Options{}
 	envCommonOptErr := envCommonOptions.ReadFromEnv()
 
 	p := flags.NewParser(&opts, flags.Default)
@@ -35,21 +36,21 @@ func main() {
 	parseFlags(p)
 }
 
-func processCommonOptions(commonOptions cmd.CommonOptions, appOpts *cmd.AppOptions, command flags.Commander) error {
+func processCommonOptions(commonOptions common.Options, appOpts *cmd.AppOptions, command flags.Commander) error {
 	if appOpts.ConfigFile != "" {
 		jsonErr := commonOptions.ReadFromJSONFile(appOpts.ConfigFile)
 		if jsonErr != nil {
 			return jsonErr
 		}
 	} else {
-		commonOptions.SetFromAppOptions(appOpts)
+		commonOptions = appOpts.GetCommonOptions()
 	}
 	validateErr := commonOptions.Validate()
 	if validateErr != nil {
 		return validateErr
 	}
 
-	commonOptCommander, _ := command.(cmd.CommonOptionsCommander)
+	commonOptCommander, _ := command.(common.Commander)
 	commonOptCommander.SetCommonOptions(&commonOptions)
 	return nil
 }

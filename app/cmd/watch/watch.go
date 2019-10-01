@@ -1,7 +1,8 @@
-package cmd
+package watch
 
 import (
 	"joytotwi/app/joy"
+	"joytotwi/app/cmd/common"
 	"joytotwi/app/joy/selector"
 	"joytotwi/app/twisender"
 	"time"
@@ -17,12 +18,12 @@ const initByTweetsCount = 1
 // WatchCommand for checking for new posts periodically and post them to twitter
 type WatchCommand struct {
 	Period int `short:"p" long:"period" default:"43200" description:"Period of checking for new posts in seconds"`
-	CommonOptions
+	common.Options
 }
 
 // SetCommonOptions sets common options in command
-func (cmd *WatchCommand) SetCommonOptions(opts *CommonOptions) {
-	cmd.CommonOptions = *opts
+func (cmd *WatchCommand) SetCommonOptions(opts *common.Options) {
+	cmd.Options = *opts
 }
 
 // Execute command method for flags.Commander
@@ -32,7 +33,7 @@ func (cmd *WatchCommand) Execute(args []string) error {
 		return err
 	}
 
-	client := twisender.CreateNewClient(getTwiCredsFromOpts(cmd.CommonOptions))
+	client := twisender.CreateNewClient(cmd.Options.GetTwiCreds())
 	err = client.Init(initByTweetsCount)
 	if err != nil {
 		return err
@@ -66,7 +67,7 @@ func (cmd *WatchCommand) startWatch(
 				log.Errorf("Post '%s': error publishing tweet: %s", post.Link, postErr.Error())
 				postAck <- true
 			} else if exists {
-				log.Infof("Post '%s' exists, waiting for next check...", post.Link)
+				log.Infof("Post '%s' exists, waiting for the next check...", post.Link)
 				postAck <- false
 			} else {
 				log.Infof("Post '%s' added, tweet id: %d", post.Link, tweetID)
