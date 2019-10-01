@@ -59,8 +59,13 @@ func processAllPagesPosts(
 			outErrors <- pagesIt.Err
 			return
 		}
-		log.Infof("Page %d loaded", pagesIt.GetCurrentPageNumber())
-		processPagePosts(pagesIt.Value, pagesIt.reverse, outPosts, outErrors, done)
+		select {
+		case <-done:
+			return
+		default:
+			log.Infof("Page %d loaded", pagesIt.GetCurrentPageNumber())
+			processPagePosts(pagesIt.Value, pagesIt.reverse, outPosts, outErrors, done)
+		}
 	}
 }
 

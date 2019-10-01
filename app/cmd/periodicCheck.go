@@ -21,6 +21,9 @@ func watchForPosts(
 	postAck = make(chan bool)
 
 	go func() {
+		defer close(posts)
+		defer close(postAck)
+
 		for {
 			select {
 			case <-timer.C:
