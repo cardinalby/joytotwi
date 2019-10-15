@@ -15,7 +15,7 @@ func watchForPosts(
 	userName string,
 	period time.Duration,
 	consumePosts func([]*joy.Post),
-	done chan struct{},
+	done <-chan struct{},
 ) {
 	// start first attempt immediately
 	timer := time.NewTimer(time.Millisecond * 0)

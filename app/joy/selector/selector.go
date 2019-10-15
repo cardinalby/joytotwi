@@ -14,8 +14,8 @@ type postsBidirectionalReader func(
 	reverse bool,
 	offset int,
 	limit int,
-	done chan struct{},
-) (chan *joy.Post, chan error)
+	done <-chan struct{},
+) (<-chan *joy.Post, <-chan error)
 
 type readerWithTraits struct {
 	reader postsBidirectionalReader
@@ -55,7 +55,7 @@ func GetPostReader(
 		return nil, fmt.Errorf("parser doesn't support reading out of %d offset", traits.MaxOffsetFromStart)
 	}
 
-	return func(userName string, done chan struct{}) (chan *joy.Post, chan error) {
+	return func(userName string, done <-chan struct{}) (<-chan *joy.Post, <-chan error) {
 		return parserWithTrait.reader(userName, reverse, offset, limit, done)
 	}, nil
 }

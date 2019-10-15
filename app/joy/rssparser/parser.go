@@ -19,8 +19,8 @@ func GetPosts(
 	reverse bool,
 	offset int,
 	limit int,
-	done chan struct{},
-) (chan *joy.Post, chan error) {
+	done <-chan struct{},
+) (<-chan *joy.Post, <-chan error) {
 	if reverse || offset < 0 || limit < 0 {
 		panic("Invalid parser args")
 	}

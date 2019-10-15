@@ -9,5 +9,5 @@ type Post struct {
 // PostsReader describes interface for exported readers exported to outside
 type PostsReader func(
 	userName string,
-	done chan struct{},
-) (chan *Post, chan error)
+	done <-chan struct{},
+) (<-chan *Post, <-chan error)

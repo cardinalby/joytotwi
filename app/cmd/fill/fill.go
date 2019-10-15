@@ -53,7 +53,7 @@ func (cmd *Command) performFill(
 	client *twisender.Client,
 	postReader joy.PostsReader,
 	offset int,
-	done chan struct{},
+	done <-chan struct{},
 ) (fillStats, error) {
 	posts, postErrors := postReader(cmd.UserName, done)
 

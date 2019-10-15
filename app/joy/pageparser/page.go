@@ -11,7 +11,7 @@ func countPagePosts(doc *goquery.Document) int {
 	return selection.Length()
 }
 
-func readPagePosts(doc *goquery.Document, reverse bool, done chan struct{}) (posts chan *joy.Post, errors chan error) {
+func readPagePosts(doc *goquery.Document, reverse bool, done <-chan struct{}) (posts chan *joy.Post, errors chan error) {
 	posts = make(chan *joy.Post)
 	errors = make(chan error)
 

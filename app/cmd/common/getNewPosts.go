@@ -11,7 +11,7 @@ func GetNewPosts(
 	client *twisender.Client,
 	postReader joy.PostsReader,
 	userName string,
-	done chan struct{},
+	done <-chan struct{},
 ) (posts []*joy.Post, err error) {
 	doneReading := make(chan struct{})
 	defer close(doneReading)

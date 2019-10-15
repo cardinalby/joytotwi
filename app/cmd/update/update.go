@@ -48,7 +48,7 @@ func (cmd *Command) Execute(args []string) error {
 func (cmd *Command) checkOnce(
 	client *twisender.Client,
 	postReader joy.PostsReader,
-	done chan struct{},
+	done <-chan struct{},
 ) {
 	posts, err := common.GetNewPosts(client, postReader, cmd.UserName, done)
 	if err != nil {

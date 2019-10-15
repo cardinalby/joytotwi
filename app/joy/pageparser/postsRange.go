@@ -5,12 +5,12 @@ import "joytotwi/app/joy"
 func limitPostsRange(
 	offset int,
 	limit int,
-	posts chan *joy.Post,
-	postErrors chan error,
-	done chan struct{},
-) (outPosts chan *joy.Post, outErrors chan error) {
-	outPosts = make(chan *joy.Post)
-	outErrors = make(chan error)
+	posts <-chan *joy.Post,
+	postErrors <-chan error,
+	done <-chan struct{},
+) (<-chan *joy.Post, <-chan error) {
+	outPosts := make(chan *joy.Post)
+	outErrors := make(chan error)
 
 	go func() {
 		defer close(outPosts)
@@ -42,5 +42,5 @@ func limitPostsRange(
 			}
 		}
 	}()
-	return
+	return outPosts, outErrors
 }

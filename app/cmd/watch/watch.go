@@ -51,7 +51,7 @@ func (cmd *Command) Execute(args []string) error {
 func (cmd *Command) startWatch(
 	client *twisender.Client,
 	postReader joy.PostsReader,
-	done chan struct{},
+	done <-chan struct{},
 ) {
 	consumePosts := func(posts []*joy.Post) {
 		log.Infof("%d new posts found", len(posts))

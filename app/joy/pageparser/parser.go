@@ -13,8 +13,8 @@ func GetPosts(
 	reverse bool,
 	offset int,
 	limit int,
-	done chan struct{},
-) (chan *joy.Post, chan error) {
+	done <-chan struct{},
+) (<-chan *joy.Post, <-chan error) {
 	outPosts := make(chan *joy.Post)
 	outErrors := make(chan error)
 
@@ -50,9 +50,9 @@ func getOffsets(userName string, postOffset int) (pageOffset, newPostsOffset int
 
 func processAllPagesPosts(
 	pagesIt *joyPagesIterator,
-	outPosts chan *joy.Post,
-	outErrors chan error,
-	done chan struct{},
+	outPosts chan<- *joy.Post,
+	outErrors chan<- error,
+	done <-chan struct{},
 ) {
 	for pagesIt.Next() {
 		if pagesIt.Err != nil {
@@ -72,9 +72,9 @@ func processAllPagesPosts(
 func processPagePosts(
 	page *goquery.Document,
 	reverse bool,
-	outPosts chan *joy.Post,
-	outErrors chan error,
-	done chan struct{},
+	outPosts chan<- *joy.Post,
+	outErrors chan<- error,
+	done <-chan struct{},
 ) {
 	pagePosts, pagePostErrors := readPagePosts(page, reverse, done)
 
