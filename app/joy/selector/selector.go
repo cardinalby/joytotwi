@@ -39,20 +39,20 @@ func GetPostReader(
 ) (joy.PostsReader, error) {
 	parserWithTrait := getReaderWithTraitByID(sourceType)
 	if parserWithTrait == nil {
-		return nil, fmt.Errorf("Parser with '%s' not supported", sourceType)
+		return nil, fmt.Errorf("parser with '%s' not supported", sourceType)
 	}
 	traits := parserWithTrait.traits
 	if !reverse && !traits.SupportsForward {
-		return nil, errors.New("Parser doesn't support forward parsing")
+		return nil, errors.New("parser doesn't support forward parsing")
 	}
 	if reverse && !traits.SupportsReverse {
-		return nil, errors.New("Parser doesn't support reverse parsing")
+		return nil, errors.New("parser doesn't support reverse parsing")
 	}
 	if traits.MaxOffsetFromStart != parsers.TraitAnyOffset && offset > traits.MaxOffsetFromStart {
-		return nil, fmt.Errorf("Parser doesn't support reading out of %d offset", traits.MaxOffsetFromStart)
+		return nil, fmt.Errorf("parser doesn't support reading out of %d offset", traits.MaxOffsetFromStart)
 	}
 	if traits.MaxOffsetFromEnd != parsers.TraitAnyOffset && offset+limit > traits.MaxOffsetFromEnd {
-		return nil, fmt.Errorf("Parser doesn't support reading out of %d offset", traits.MaxOffsetFromStart)
+		return nil, fmt.Errorf("parser doesn't support reading out of %d offset", traits.MaxOffsetFromStart)
 	}
 
 	return func(userName string, done chan struct{}) (chan *joy.Post, chan error) {

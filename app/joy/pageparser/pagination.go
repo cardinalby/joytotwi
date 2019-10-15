@@ -41,14 +41,14 @@ func readPagination(doc *goquery.Document) (*joyPagination, error) {
 func getNumberFromElem(block *goquery.Selection, selector string) (int, error) {
 	elem := block.Find(selector)
 	if elem.Length() == 0 {
-		return 0, fmt.Errorf("Element '%s' not found in pagination block", selector)
+		return 0, fmt.Errorf("element '%s' not found in pagination block", selector)
 	}
 	if elem.Length() > 1 {
-		return 0, fmt.Errorf("Element '%s' found %d times in pagination block", selector, elem.Length())
+		return 0, fmt.Errorf("element '%s' found %d times in pagination block", selector, elem.Length())
 	}
 	res, err := strconv.Atoi(elem.First().Text())
 	if err != nil {
-		return 0, fmt.Errorf("Invalid value in '%s': %s", selector, err.Error())
+		return 0, fmt.Errorf("invalid value in '%s': %s", selector, err.Error())
 	}
 	return res, nil
 }

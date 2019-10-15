@@ -1,11 +1,11 @@
 package common
 
 import (
-	"joytotwi/app/twisender"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"joytotwi/app/twisender"
 	"path/filepath"
 	"strings"
 
@@ -32,15 +32,15 @@ type Commander interface {
 func (opts *Options) ReadFromJSONFile(path string) error {
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		return fmt.Errorf("Invalid file path: '%s', %s", path, err.Error())
+		return fmt.Errorf("invalid file path: '%s', %s", path, err.Error())
 	}
 	bytes, err := ioutil.ReadFile(absPath)
 	if err != nil {
-		return fmt.Errorf("Error reading file: %s", err.Error())
+		return fmt.Errorf("error reading file: %s", err.Error())
 	}
 	err = json.Unmarshal(bytes, opts)
 	if err != nil {
-		return fmt.Errorf("Error parsing json file: %s", err.Error())
+		return fmt.Errorf("error parsing json file: %s", err.Error())
 	}
 	return nil
 }
@@ -52,7 +52,7 @@ func (opts *Options) ReadFromEnv() error {
 
 // Validate option values
 func (opts *Options) Validate() error {
-	messages := []string{}
+	var messages []string
 
 	checkNotEmpty := func(val string, name string) {
 		if strings.Trim(val, " ") == "" {

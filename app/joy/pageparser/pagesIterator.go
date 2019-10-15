@@ -18,7 +18,6 @@ type joyPagesIterator struct {
 }
 
 const pageNumberLast = -1
-const postsPerPageDefault = 10
 
 func createPagesIterator(userName string, reverse bool, offset int) *joyPagesIterator {
 	return &joyPagesIterator{reverse: reverse, userName: userName, offset: offset}
@@ -55,11 +54,11 @@ func (it *joyPagesIterator) getNextPageURL() (url string, exists bool, err error
 	}
 	lastPageNumber, err := it.getLastPageNumber()
 	if err != nil {
-		return "", false, fmt.Errorf("Can't get last page number: %s", err.Error())
+		return "", false, fmt.Errorf("can't get last page number: %s", err.Error())
 	}
 	if it.offset > lastPageNumber {
 		return "", false, fmt.Errorf(
-			"Page offset %d is too big, last page number is: %d", it.offset, lastPageNumber,
+			"page offset %d is too big, last page number is: %d", it.offset, lastPageNumber,
 		)
 	}
 	return getPageURL(it.userName, lastPageNumber-it.offset), true, nil
@@ -75,7 +74,7 @@ func (it *joyPagesIterator) GetCurrentPageNumber() int {
 func (it *joyPagesIterator) downloadPage(url string) {
 	html, err := goquery.NewDocument(url)
 	if err != nil {
-		it.Err = fmt.Errorf("Page '%s' load error: %s", url, err.Error())
+		it.Err = fmt.Errorf("page '%s' load error: %s", url, err.Error())
 	} else {
 		it.Err = nil
 		it.Value = html
@@ -92,10 +91,10 @@ func getPageURL(userName string, pageNumber int) string {
 }
 
 func (it *joyPagesIterator) getLastPageNumber() (int, error) {
-	url := getPageURL(it.userName, pageNumberLast)
-	html, err := goquery.NewDocument(url)
+	pageUrl := getPageURL(it.userName, pageNumberLast)
+	html, err := goquery.NewDocument(pageUrl)
 	if err != nil {
-		return 0, fmt.Errorf("Page '%s' load error: %s", url, err.Error())
+		return 0, fmt.Errorf("page '%s' load error: %s", pageUrl, err.Error())
 	}
 	pagination, err := readPagination(html)
 	if err != nil {
@@ -105,10 +104,10 @@ func (it *joyPagesIterator) getLastPageNumber() (int, error) {
 }
 
 func getPostsPerPage(userName string) (int, error) {
-	url := getPageURL(userName, 1)
-	html, err := goquery.NewDocument(url)
+	pageUrl := getPageURL(userName, 1)
+	html, err := goquery.NewDocument(pageUrl)
 	if err != nil {
-		return 0, fmt.Errorf("Page '%s' load error: %s", url, err.Error())
+		return 0, fmt.Errorf("page '%s' load error: %s", pageUrl, err.Error())
 	}
 
 	pagination, err := readPagination(html)
@@ -116,7 +115,7 @@ func getPostsPerPage(userName string) (int, error) {
 		return 0, err
 	}
 	if pagination.prevLink == "" {
-		return 0, errors.New("Only one page present, can't determine posts count per page")
+		return 0, errors.New("only one page present, can't determine posts count per page")
 	}
 	return countPagePosts(html), nil
 }

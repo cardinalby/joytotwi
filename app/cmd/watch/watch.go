@@ -1,8 +1,8 @@
 package watch
 
 import (
-	"joytotwi/app/joy"
 	"joytotwi/app/cmd/common"
+	"joytotwi/app/joy"
 	"joytotwi/app/joy/selector"
 	"joytotwi/app/twisender"
 	"time"
@@ -15,19 +15,20 @@ const postsOffset = 0
 const postsLimit = 0
 const initByTweetsCount = 1
 
-// WatchCommand for checking for new posts periodically and post them to twitter
-type WatchCommand struct {
+// Command for checking for new posts periodically and post them to twitter
+type Command struct {
 	Period int `short:"p" long:"period" default:"43200" description:"Period of checking for new posts in seconds"`
 	common.Options
 }
 
 // SetCommonOptions sets common options in command
-func (cmd *WatchCommand) SetCommonOptions(opts *common.Options) {
+func (cmd *Command) SetCommonOptions(opts *common.Options) {
 	cmd.Options = *opts
 }
 
 // Execute command method for flags.Commander
-func (cmd *WatchCommand) Execute(args []string) error {
+func (cmd *Command) Execute(args []string) error {
+	//noinspection GoBoolExpressions
 	postReader, err := selector.GetPostReader(cmd.SourceType, postsReverse, postsOffset, postsLimit)
 	if err != nil {
 		return err
@@ -47,7 +48,7 @@ func (cmd *WatchCommand) Execute(args []string) error {
 	return nil
 }
 
-func (cmd *WatchCommand) startWatch(
+func (cmd *Command) startWatch(
 	client *twisender.Client,
 	postReader joy.PostsReader,
 	done chan struct{},

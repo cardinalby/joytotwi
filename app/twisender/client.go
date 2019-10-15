@@ -76,7 +76,7 @@ func (client *Client) PostNew(text string, imageURL string) (tweetID int64, exis
 func getOriginPostLinkFromTweet(tweet *anaconda.Tweet) (string, error) {
 	urls := tweet.Entities.Urls
 	if len(urls) != 1 {
-		return "", fmt.Errorf("Tweet has %d links", len(urls))
+		return "", fmt.Errorf("tweet has %d links", len(urls))
 	}
 	return urls[0].Expanded_url, nil
 }
@@ -100,7 +100,7 @@ func downloadImageBase64(imgURL string) (string, error) {
 		return "", err
 	}
 	if resp.StatusCode != 200 {
-		return "", fmt.Errorf("Wrong response code: %d", resp.StatusCode)
+		return "", fmt.Errorf("wrong response code: %d", resp.StatusCode)
 	}
 
 	imageData, readErr := ioutil.ReadAll(resp.Body)

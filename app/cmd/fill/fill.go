@@ -11,8 +11,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// FillCommand is intended to initially fill account by all posts
-type FillCommand struct {
+// Command is intended to initially fill account by all posts
+type Command struct {
 	Offset         int  `short:"o" long:"offset" default:"1" description:"Number of first post to start"`
 	Limit          int  `short:"l" long:"limit" default:"0" description:"How many posts to process. 0 to process all"`
 	StopOnExistent bool `long:"stop-on-existent" description:"Stop parse posts after first existent tweet"`
@@ -21,12 +21,12 @@ type FillCommand struct {
 }
 
 // SetCommonOptions sets common options in command
-func (cmd *FillCommand) SetCommonOptions(opts *common.Options) {
+func (cmd *Command) SetCommonOptions(opts *common.Options) {
 	cmd.Options = *opts
 }
 
 // Execute command method for flags.Commander
-func (cmd *FillCommand) Execute(args []string) error {
+func (cmd *Command) Execute(args []string) error {
 	postReader, err := selector.GetPostReader(cmd.SourceType, true, cmd.Offset, cmd.Limit)
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (cmd *FillCommand) Execute(args []string) error {
 	return nil
 }
 
-func (cmd *FillCommand) performFill(
+func (cmd *Command) performFill(
 	client *twisender.Client,
 	postReader joy.PostsReader,
 	offset int,
@@ -89,7 +89,7 @@ func (cmd *FillCommand) performFill(
 			if err != nil {
 				offset++
 				stats.errorsCount++
-				itemError = fmt.Errorf("Post (offset: %d) parse error: %s", offset, err.Error())
+				itemError = fmt.Errorf("post (offset: %d) parse error: %s", offset, err.Error())
 			}
 		case <-done:
 			return stats, nil

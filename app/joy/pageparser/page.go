@@ -6,11 +6,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type joyPage struct {
-	number int
-	posts  []*joy.Post
-}
-
 func countPagePosts(doc *goquery.Document) int {
 	selection := doc.Find(".postContainer")
 	return selection.Length()

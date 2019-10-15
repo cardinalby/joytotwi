@@ -1,6 +1,7 @@
 package rssparser
 
 import (
+	"errors"
 	"fmt"
 	"joytotwi/app/joy"
 	"net/url"
@@ -88,11 +89,11 @@ func feedItemToPost(item *gofeed.Item) (*joy.Post, error) {
 func getImageURLFromItemDescr(descr string) (string, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(descr))
 	if err != nil {
-		return "", fmt.Errorf("Can't parse description as HTML: %s", err.Error())
+		return "", fmt.Errorf("can't parse description as HTML: %s", err.Error())
 	}
 	src, exists := doc.Find("img").First().Attr("src")
 	if !exists {
-		return "", fmt.Errorf("Can't find <img> tag in description: %s", err.Error())
+		return "", errors.New("can't find <img> tag in description")
 	}
 	return src, nil
 }

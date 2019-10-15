@@ -1,15 +1,15 @@
 package cmd
 
 import (
-	"joytotwi/app/cmd/watch"
-	"joytotwi/app/cmd/fill"
 	"joytotwi/app/cmd/common"
+	"joytotwi/app/cmd/fill"
+	"joytotwi/app/cmd/watch"
 )
 
 // AppOptions with all cli commands and flags
 type AppOptions struct {
-	Watch watch.WatchCommand `command:"watch"`
-	Fill  fill.FillCommand  `command:"fill"`
+	Watch watch.Command `command:"watch"`
+	Fill  fill.Command  `command:"fill"`
 
 	ConfigFile string `short:"c" long:"config-file" default:"" description:"Load app options from json file"`
 
@@ -24,11 +24,11 @@ type AppOptions struct {
 // GetCommonOptions returns subset of options needed for every command
 func (opts *AppOptions) GetCommonOptions() common.Options {
 	return common.Options{
-		SourceType: opts.SourceType,
-		UserName: opts.UserName,
-		AccessToken: opts.AccessToken,
+		SourceType:        opts.SourceType,
+		UserName:          opts.UserName,
+		AccessToken:       opts.AccessToken,
 		AccessTokenSecret: opts.AccessTokenSecret,
-		ConsumerKey: opts.ConsumerKey,
-		ConsumerSecret: opts.ConsumerSecret,
+		ConsumerKey:       opts.ConsumerKey,
+		ConsumerSecret:    opts.ConsumerSecret,
 	}
 }

@@ -18,7 +18,7 @@ func main() {
 	p := flags.NewParser(&opts, flags.Default)
 	p.CommandHandler = func(command flags.Commander, args []string) error {
 		if envCommonOptErr != nil {
-			return fmt.Errorf("Error reading options from env variables: %s", envCommonOptErr.Error())
+			return fmt.Errorf("error reading options from env variables: %s", envCommonOptErr.Error())
 		}
 		// read from json config if opts.ConfigFile is set or from opts and pass to command
 		err := processCommonOptions(envCommonOptions, &opts, command)
@@ -29,7 +29,7 @@ func main() {
 		err = command.Execute(args)
 		if err != nil {
 			log.Error(err)
-			return fmt.Errorf("Command '%s' finished with error", p.Active.Name)
+			return fmt.Errorf("command '%s' finished with error", p.Active.Name)
 		}
 		return err
 	}
