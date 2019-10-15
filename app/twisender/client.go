@@ -55,9 +55,15 @@ func (client *Client) Init(loadCount int) error {
 	return nil
 }
 
+// Exists checks if tweet with text was loaded during Init
+func (client *Client) Exists(text string) bool {
+	_, exists := client.existedLinks[text]
+	return exists
+}
+
 // PostNew post new tweet if it didn't exist at the moment of Init() call
 func (client *Client) PostNew(text string, imageURL string) (tweetID int64, exists bool, err error) {
-	if _, exists := client.existedLinks[text]; exists {
+	if client.Exists(text) {
 		return 0, true, nil
 	}
 	media, err := client.uploadExternalImg(imageURL)

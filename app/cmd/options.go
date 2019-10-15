@@ -3,13 +3,15 @@ package cmd
 import (
 	"joytotwi/app/cmd/common"
 	"joytotwi/app/cmd/fill"
+	"joytotwi/app/cmd/update"
 	"joytotwi/app/cmd/watch"
 )
 
 // AppOptions with all cli commands and flags
 type AppOptions struct {
-	Watch watch.Command `command:"watch"`
-	Fill  fill.Command  `command:"fill"`
+	Update update.Command `command:"update"`
+	Watch  watch.Command  `command:"watch"`
+	Fill   fill.Command   `command:"fill"`
 
 	ConfigFile string `short:"c" long:"config-file" default:"" description:"Load app options from json file"`
 

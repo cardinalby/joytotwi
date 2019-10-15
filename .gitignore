@@ -1,3 +1,5 @@
 joytotwi
+joytotwi.exe
 config.json
 .idea/*
+!.idea/*runConfigurations

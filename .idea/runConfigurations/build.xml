@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="joytotwi" />
+    <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-o &quot;joytotwi.exe&quot;" />
+    <kind value="FILE" />
+    <filePath value="./app/main.go" />
+    <directory value="$PROJECT_DIR$/" />
+    <output_directory value="." />
+    <option name="run" value="false" />
+    <method v="2" />
+  </configuration>
+</component>
