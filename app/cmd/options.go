@@ -24,8 +24,8 @@ type AppOptions struct {
 }
 
 // GetCommonOptions returns subset of options needed for every command
-func (opts *AppOptions) GetCommonOptions() common.Options {
-	return common.Options{
+func (opts *AppOptions) GetCommonOptions() *common.Options {
+	return &common.Options{
 		SourceType:        opts.SourceType,
 		UserName:          opts.UserName,
 		AccessToken:       opts.AccessToken,

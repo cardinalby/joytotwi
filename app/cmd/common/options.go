@@ -28,26 +28,32 @@ type Commander interface {
 	SetCommonOptions(opts *Options)
 }
 
-// ReadFromJSONFile reads options from json config
-func (opts *Options) ReadFromJSONFile(path string) error {
+// CreateOptionsFromJSONFile reads options from json config
+func CreateOptionsFromJSONFile(path string) (*Options, error) {
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		return fmt.Errorf("invalid file path: '%s', %s", path, err.Error())
+		return nil, fmt.Errorf("invalid file path: '%s', %s", path, err.Error())
 	}
 	bytes, err := ioutil.ReadFile(absPath)
 	if err != nil {
-		return fmt.Errorf("error reading file: %s", err.Error())
+		return nil, fmt.Errorf("error reading file: %s", err.Error())
 	}
-	err = json.Unmarshal(bytes, opts)
+	var opts Options
+	err = json.Unmarshal(bytes, &opts)
 	if err != nil {
-		return fmt.Errorf("error parsing json file: %s", err.Error())
+		return nil, fmt.Errorf("error parsing json file: %s", err.Error())
 	}
-	return nil
+	return &opts, nil
 }
 
-// ReadFromEnv reads options from env
-func (opts *Options) ReadFromEnv() error {
-	return env.Parse(opts)
+// CreateOptionsFromEnv reads options from env
+func CreateOptionsFromEnv() (*Options, error) {
+	var opts Options
+	err := env.Parse(&opts)
+	if err != nil {
+		return nil, err
+	}
+	return &opts, nil
 }
 
 // Validate option values

@@ -3,9 +3,9 @@
     <module name="joytotwi" />
     <working_directory value="$PROJECT_DIR$" />
     <parameters value="-c &quot;config.json&quot; update" />
-    <kind value="FILE" />
+    <kind value="DIRECTORY" />
     <filePath value="$PROJECT_DIR$/app/main.go" />
-    <directory value="$PROJECT_DIR$/" />
+    <directory value="$PROJECT_DIR$/app" />
     <method v="2" />
   </configuration>
 </component>
