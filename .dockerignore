@@ -3,4 +3,4 @@ joytotwi.exe
 artifacts
 config.json
 .idea/*
-!.idea/*runConfigurations
+.vscode/*

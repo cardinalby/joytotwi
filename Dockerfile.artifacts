@@ -1,0 +1,21 @@
+# volume required: /artifacts
+FROM golang:alpine
+ENV VERSION=local
+COPY . /src
+WORKDIR /src
+CMD CGO_ENABLED=0 go test ./app/... &&\
+    if [ -z "$VERSION" ] ; then \
+        echo "version arg not specified, use local"; \
+    else \
+        echo "version is: ${VERSION}"; \
+    fi &&\
+    echo "Building for linux amd64..." &&\
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-extldflags "-static"' \
+        -o /artifacts/${VERSION}.joytotwi.linux-amd64 ./app/ &&\
+    echo "Building for windows amd64..." &&\
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-extldflags "-static"' \
+        -o /artifacts/${VERSION}.joytotwi.windows-amd64.exe ./app/ &&\
+    echo "Building for darwin amd64..." &&\
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-extldflags "-static"' \
+        -o /artifacts/${VERSION}.joytotwi.darwin-amd64 ./app/ &&\
+    echo "Done"

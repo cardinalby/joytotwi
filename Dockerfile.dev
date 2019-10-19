@@ -1,0 +1,12 @@
+FROM golang:alpine
+
+RUN apk update &&\
+    apk add --virtual build-dependencies build-base gcc bash git &&\
+    apk add bash &&\
+    go get github.com/derekparker/delve/cmd/dlv &&\
+    mkdir /src
+COPY . /src/
+WORKDIR /src
+RUN go get ./app/
+EXPOSE 2345
+ENTRYPOINT ["dlv", "--listen=:2345", "--headless=true", "--api-version=2", "debug", "./app", "--"]
