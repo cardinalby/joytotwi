@@ -13,5 +13,6 @@ deploy:
   file: "artifacts/*"
   skip_cleanup: true
   on:
+    condition: tag IS present
     branch: master
     tags: true
