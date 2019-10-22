@@ -7,11 +7,15 @@ stages:
   - Tests
   - Release
 
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
 include:
   - stage: Tests
     name: "Testing"
     if: (branch = master) OR (tag IS present) OR (type = pull_request)
-    script: make test
+    script: GO111MODULE=on make test
   # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
   - stage: Release
     name: "Releasing a new version"
