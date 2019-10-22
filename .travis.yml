@@ -1,0 +1,15 @@
+language: go
+
+services:
+  - docker
+
+script:
+  - make artifacts version=${TRAVIS_TAG}
+
+deploy:
+  provider: releases
+  api_key: "pARddpuQT+Q9DPi7/3Y8swfO/7HcqqY+C27B74CYgMJheNl6tXwcH6Wf7eUEj7q0sZbMjAEhsa6l6cag6J3JXG53G8Vc4llfsBz3SBNNuLlFxqfsR1ltYyLVECfuCuBd2NBFIoeyTj7qlFQUcNdKm9ZTaBO9pAUfUx/e9UGsbR+K0nSyUfpXcgvDQZY9ml2UuKIHvYaXlEZ8EwtWvokKhdhbi/LH4gyQ59oUsy6WZtzbpY/J7MbXRSd4nwyR6kmKKBD7LZ5arj31iMZlqeuIz1+RGjQDmM8oTSS1m6FSjKpTHWq5EB7fJOcrPwQw3apsFxF0QHbackOSvMFjEuqjipLcBPvsnTEluhbiRqFQVqkuTB7ate7PGha/cY/gLHH7n37F6tKuId2kec4ZzRiZlCAA7GuR0Zd4ft8hP72d6lzYdKob2dvV6eFowL57pha67Sr22xqKeQ1vh1FqyeycmgdicEwlZDsW8svGNqJSGZ6c/Ei8NwPApeFxJ4spzlJKpcBtHYYIqXD9qZognw1nwYpVuN9aAbEuOkCX5lEsXsV4ydsk5rsp3PxV8UsVE/Q2EN4jVFbYHyeYuYyrZm3gcvGduDJoBFNsNBtngE28y2pbsTT3f/Xk+HN4ueV3Heaqi8eliYzVAHoJNC6jbQAuuPVORMaKezzo74oFG5oxZdU="
+  file: "artifacts/*"
+  skip_cleanup: true
+  on:
+    tags: true
