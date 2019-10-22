@@ -3,14 +3,27 @@ language: go
 services:
   - docker
 
-script:
-  - make artifacts version=${TRAVIS_TAG}
+stages:
+  - Tests
+  - Release
 
-deploy:
-  provider: releases
-  api_key:
-    secure: $GH_TOKEN
-  file: "artifacts/*"
-  skip_cleanup: true
-  on:
-    tags: true
+include:
+  - stage: Tests
+    name: "Testing"
+    if: (branch = master) OR (tag IS present) OR (type = pull_request)
+    script: make test
+  # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
+  - stage: Release
+    name: "Releasing a new version"
+    if: tag IS present
+    script:
+      - make artifacts version=${TRAVIS_TAG}
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: $GH_TOKEN
+      file_glob: true
+      file: "artifacts/*"
+      on:
+        tags: true

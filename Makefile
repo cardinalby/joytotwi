@@ -1,8 +1,11 @@
 # all our targets are phony (no files to check).
-.PHONY: image image-dev artifacts prune
+.PHONY: test image image-dev artifacts prune
 
 curdir = $(PWD)
 export curdir
+
+test:
+	go test -v ./app/...
 
 image:
 	docker build . -t joytotwitter:release
