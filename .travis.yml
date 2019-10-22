@@ -3,6 +3,8 @@ language: go
 services:
   - docker
 
+if: (branch = master) AND (tag IS present)
+
 script:
   - make artifacts version=${TRAVIS_TAG}
 
@@ -13,6 +15,4 @@ deploy:
   file: "artifacts/*"
   skip_cleanup: true
   on:
-    condition: tag IS present
-    branch: master
     tags: true
