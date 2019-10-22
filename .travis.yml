@@ -15,7 +15,7 @@ include:
   - stage: Tests
     name: "Testing"
     if: (branch = master) OR (tag IS present) OR (type = pull_request)
-    script: GO111MODULE=on make test
+    script: GO111MODULE=on go get ./app/ && go test -v ./app/...
   # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
   - stage: Release
     name: "Releasing a new version"
