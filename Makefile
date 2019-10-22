@@ -5,7 +5,7 @@ curdir = $(PWD)
 export curdir
 
 test:
-	go test -v ./app/...
+	go get ./app/ && go test -v ./app/...
 
 image:
 	docker build . -t joytotwitter:release
