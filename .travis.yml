@@ -3,8 +3,6 @@ language: go
 services:
   - docker
 
-if: (branch = master) AND (tag IS present)
-
 script:
   - make artifacts version=${TRAVIS_TAG}
 
