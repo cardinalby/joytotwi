@@ -5,18 +5,18 @@ curdir = $(PWD)
 export curdir
 
 test:
-	go test -v ./app/...
+	docker build . -t cardinalby/joytotwitter:tests --target tests
 
 image:
-	docker build . -t joytotwitter:release
+	docker build . -t cardinalby/joytotwitter:release
 
 image-dev:
-	docker build . -f "./Dockerfile.dev" -t joytotwitter:dev
+	docker build . -f "./Dockerfile.dev" -t cardinalby/joytotwitter:dev
 
 # pass "version" argument
 artifacts:
-	docker build . -f "./Dockerfile.artifacts" -t joytotwitter:artifacts &&\
-	docker run -it -v $(curdir)/artifacts:/artifacts/ --env VERSION=$(version) joytotwitter:artifacts
+	docker build . -f "./Dockerfile.artifacts" -t cardinalby/joytotwitter:artifacts &&\
+	docker run -it -v $(curdir)/artifacts:/artifacts/ --env VERSION=$(version) cardinalby/joytotwitter:artifacts
 
 prune:
 	docker system prune -af
