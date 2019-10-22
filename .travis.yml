@@ -9,8 +9,9 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: "BEhieAj/PUrXgpPhOujXnZX2cAVqlONWJuhz+vc/2Hz06pdCoAPigd96siEVNr1JaBgUHSThFOm2mfr5JoMbVPqmk6iOlMr+9UHdr6wL9z9RCcnUHBTkuX1GdIt6cxU/muR+GdnoR4eS1keA2OlpmxrSP3MAGyqZNjPAt6SW8X0Ylsn/XEjjoAjk/opoeOId3G0EN/c03Vj2EDk6DibdzdPsLyJdBNJGxMiRfT0iW+OJNLk2KIF76Xy3RKtIZBm5Fg8cLxlAKGP2vpqmLfPeavhYZzF9fGYeJ7ErNf40jjlLosoUOWwsjsMIs0p2Oz9UpImTN4MymwDD0+Gxp3kJ1JKVZbH1m7qvzLSPezoJ9JuhaZHbwVh7MaSK6jxFFMlAWGy8Ruj0xX5CyXOp07h4tsAdlsUCZJVCH+46PGn4l1X/uEEUAAe6vaQ2MCdjeOm/6m5AksOcd/OxX1oWESjCzQd8cQer7d28YD/PbOjxgwTZPkyxXwbDhPisgr+Ji/5vZt4CJfljl1UuC9x+pOm5nh8cPsQYPqtc0so4jcGBgICH5sD9UlhLOlrvxWKN6O3g284iLghIZ8RcFXZjG44PruCjymgbYaE7XgXBjJgfZ7xdIS+MsKXfb/L1CWpDtIJ84K7rGxYhjVSuXH0TQxrnrZbkN4IzJGZnWLNwwEqudec="
+    secure: $GH_TOKEN
   file: "artifacts/*"
   skip_cleanup: true
   on:
+    branch: master
     tags: true
