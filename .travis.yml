@@ -23,6 +23,7 @@ jobs:
         skip_cleanup: true
         api_key:
           secure: $GH_TOKEN
+        body: "v${TRAVIS_TAG}"
         file_glob: true
         file: "artifacts/*"
         on:
