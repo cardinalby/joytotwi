@@ -13,8 +13,6 @@ jobs:
       name: "Testing"
       if: (branch = master) OR (tag IS present) OR (type = pull_request)
       script: make test
-
-    # https://docs.travis-ci.com/user/build-stages/deploy-github-releases/
     - stage: Release
       name: "Releasing a new version"
       if: tag IS present
@@ -29,10 +27,9 @@ jobs:
         file: "artifacts/*"
         on:
           tags: true
-
     - stage: Release
       name: "Publishing docker image"
       if: tag IS present
-        script:
-          - make image skip-test=1
-          - make push-image username="$DOCKER_USERNAME" password="$DOCKER_PASSWORD"
+      script:
+        - make image skip-test=1
+        - make push-image username="$DOCKER_USERNAME" password="$DOCKER_PASSWORD"
