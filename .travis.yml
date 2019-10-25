@@ -34,3 +34,9 @@ jobs:
       script:
         - make image skip-test=1
         - make push-image username="$DOCKER_USERNAME" password="$DOCKER_PASSWORD"
+    - stage: Release
+      name: "Deploying to Heroku"
+      if: tag IS present
+      deploy:
+        provider: heroku
+        api_key: $HEROKU_API_KEY
