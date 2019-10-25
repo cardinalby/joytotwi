@@ -1,3 +1,6 @@
 build:
-  docker:
-    web: Dockerfile.heroku
+  languages:
+    - go
+
+run:
+  web: bin/app update
