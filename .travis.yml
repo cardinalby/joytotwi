@@ -6,6 +6,7 @@ services:
 stages:
   - Tests
   - Release
+  - Deploy
 
 jobs:
   include:
@@ -34,12 +35,11 @@ jobs:
       script:
         - make image skip-test=1
         - make push-image username="$DOCKER_USERNAME" password="$DOCKER_PASSWORD"
-    - stage: Release
+    - stage: Deploy
       name: "Deploying to Heroku"
       if: tag IS present
-      deploy:
-        provider: heroku
-        api_key: $HEROKU_API_KEY
-        app: joytotwitter
-        on:
-          tags: true
+      script:
+        - docker build . -f "./Dockerfile.heroku" -t registry.heroku.com/$HEROKU_APP/web
+        - docker login --username=_ --password="$HEROKU_AUTH_TOKEN" registry.heroku.com
+        - docker push registry.heroku.com/$HEROKU_APP/web
+        - ./heroku-container-release.sh
