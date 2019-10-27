@@ -1,5 +1,5 @@
 # all our targets are phony (no files to check).
-.PHONY: test image push-image image-skip-test image-dev artifacts prune
+.PHONY: test image heroku-image push-image image-skip-test image-dev artifacts prune
 
 curdir = $(PWD)
 export curdir
@@ -10,6 +10,10 @@ test:
 # optional arg: "skip-test=1"
 image:
 	docker build . -t cardinalby/joytotwitter:release --build-arg SKIP_TEST=${skip-test}
+
+# arg: heroku_app
+heroku-image:
+	docker build . -f "./Dockerfile.heroku" -t registry.heroku.com/${heroku_app}/web
 
 push-image:
 	echo "${password}" | docker login -u "${username}" --password-stdin &&\
